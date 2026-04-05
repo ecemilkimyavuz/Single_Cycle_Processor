@@ -1,0 +1,22 @@
+00500113 // [PC 0x00] addi x2, x0, 5      -> Load immediate 5 into register x2
+00c00193 // [PC 0x04] addi x3, x0, 12     -> Load immediate 12 (0xC) into register x3
+0021c333 // [PC 0x08] xor  x6, x3, x2     -> THE XOR TEST: x6 = 12 XOR 5 (Expected Result: 9)
+ff718393 // [PC 0x0c] addi x7, x3, -9     -> Original test begins: x7 = 12 - 9 = 3
+0023e233 // [PC 0x10] or   x4, x7, x2     -> Bitwise OR: x4 = 3 | 5 = 7
+0041f2b3 // [PC 0x14] and  x5, x3, x4     -> Bitwise AND: x5 = 12 & 7 = 4
+004282b3 // [PC 0x18] add  x5, x5, x4     -> Addition: x5 = 4 + 7 = 11 (0xB)
+02728863 // [PC 0x1c] beq  x5, x7, end    -> Branch if equal (x5 == x7) -> False
+0041a233 // [PC 0x20] slt  x4, x3, x4     -> Set less than: x4 = (12 < 7) ? 1 : 0 -> 0
+00020463 // [PC 0x24] beq  x4, x0, around -> Branch if x4 == 0 -> True (Jumps to "around")
+00000293 // [PC 0x28] addi x5, x0, 0      -> (Skipped) Load 0 into x5
+0023a233 // [PC 0x2c] around: slt x4, x7, x2 -> around: x4 = (3 < 5) ? 1 : 0 -> 1
+005203b3 // [PC 0x30] add  x7, x4, x5     -> x7 = 1 + 0 = 1
+402383b3 // [PC 0x34] sub  x7, x7, x2     -> x7 = 1 - 5 = -4
+0471aa23 // [PC 0x38] sw   x7, 84(x3)     -> Store word: Memory[12+84=96] = -4
+06002103 // [PC 0x3c] lw   x2, 96(x0)     -> Load word: x2 = Memory[96] = -4
+005104b3 // [PC 0x40] add  x9, x2, x5     -> x9 = -4 + 0 = -4
+008001ef // [PC 0x44] jal  x3, end        -> Jump and link: jump to "end"
+00100113 // [PC 0x48] addi x2, x0, 1      -> (Skipped)
+00910133 // [PC 0x4c] end: add x2, x2, x9 -> end: Final calculation
+0221a023 // [PC 0x50] sw   x2, 32(x3)     -> Final SUCCESS store: Write 0x19 (25) to Memory
+00210063 // [PC 0x54] done: beq x2, x2, done -> INFINITE LOOP (Program ends here)
